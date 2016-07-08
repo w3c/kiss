@@ -1,0 +1,412 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML+RDFa 1.1//EN' 'http://www.w3.org/MarkUp/DTD/xhtml-rdfa-2.dtd'>
+<html dir="ltr" about="" property="dcterms:language" content="en" xmlns="http://www.w3.org/1999/xhtml" prefix='bibo: http://purl.org/ontology/bibo/' typeof="bibo:Document">
+<head>
+    <title>Recipes for building service-oriented knowledge-driven systems</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    
+<link href="cg-draft.css" rel="stylesheet" type="text/css" charset="utf-8" />
+</head>
+  <body><div class="head"><p><a href="http://www.w3.org/"><img width="72" height="48" src="http://www.w3.org/Icons/w3c_home" alt="W3C" /></a></p><h1 property="dcterms:title" class="title" id="title">Recipes for building service-oriented knowledge-driven systems</h1><h2 property="bibo:subtitle" id="subtitle">Draft 2016-07-08</h2>
+<dl>
+<dt>Latest version</dt>
+<dd><a href="https://www.w3.org/community/kiss/latest_recipes/">https://www.w3.org/community/kiss/latest_recipes/</a></dd>
+<dt>Editor</dt>
+<dd>Andrei Lobov, Tampere University of Technology</dd>
+</dl>
+<dt>Authors</dt>
+<dd>Pavel Balda, University of West Bohemia</dd>
+<dd>Sergii Iarovyi, Tampere University of Technology</dd>
+<dd>Andrei Lobov, Tampere University of Technology</dd>
+<dd>Wael Mohammed, Tampere University of Technology</dd>
+<dd>Borja Ramis Ferrer, Tampere University of Techology</dd>
+</dl>
+<p class="copyright">Copyright &copy; 2016 the Contributors to the Recipes for building service-oriented knowledge-driven systems Specification, published by the  <a href="http://www.w3.org/community/kiss/">open Knowledge-driven Service-oriented System architectures and APIs (KiSS) community group</a> under the <a href="https://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a>. A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/">summary</a> is available.</p>
+<hr /></div>
+
+<h2 id="abstract">Abstract</h2>
+
+<p>This document is the first draft specification for the recipes to build service-oriented knowledge-driven systems. </p>
+
+<h2>Status of This Document</h2>
+
+<p><em>This specification was published by the <a href="http://www.w3.org/community/kiss/">open Knowledge-driven Service-oriented System architectures and APIs (KiSS) community group</a>. It is not a W3C Standard nor is it on the W3C Standards Track. Please note that under the <a href="http://www.w3.org/community/about/agreements/cla/">W3C Community Contributor License Agreement (CLA)</a> there is a limited opt-out and other conditions apply. Learn more about <a href="http://www.w3.org/community/">W3C Community and Business Groups</a>.</em></p>
+
+<h2 class="introductory">Table of Contents</h2>
+<ol>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#terms">Terminology</a></li>
+<li><a href="#devices">Devices</a></li>
+<li><a href="#know">Knowledge representation and reasoning</a></li>
+<li><a href="#services">Service protocols</a></li>
+<li><a href="#composition">Service composition and integration</a></li>
+</ol>
+
+<!-- Content -->
+<a name="intro"></a>
+<h2><span class="secno">1. </span>Introduction</h2>
+<p>This document summarizes different problems and solutions (via APIs) for implementing service-oriented knowledge-driven systems. Services are the basic components for building loosely-coupled applications, where the services can be integrated and invoked on demand. These basic components joint with the knowledge representation allow building powerful applications utilizing self-descriptive and discoverable components features at run time. The ultimate goal of an application in this context can be seen as a continuous search and improvement on how to efficiently address different changing goals of a system by integrating together necessary resources (e.g. services). Such integration can be automated thanks to the knowledge representation and reasoning performed by machines (computers) at run time.</p>
+
+<p>This document is organized as follows. Next subsection provides the terminology as it is understood and defined by KiSS community group. Then, there are dedicated chapters coming on devices; knowledge representation and reasoning; service protocols and service composition and integration. Each of those dedicated chapters has problem definition and APIs subsections to outline main issues at each level and APIs that could help in finding solutions for those problems.</p>
+
+<p>This document is a living doc which will be further improved and extended based on new insights received by the KiSS community group members and feedback. The feedback on the document can be provided via the corresponding interface specified at <a href="https://www.w3.org/community/kiss/feedback" target="_blank">https://www.w3.org/community/kiss/feedback</a>.</p>
+    
+<a name="terms"></a>
+<h2><span class="secno">2. </span>Terminology</h2>
+<p>
+    <ul>
+        <li><b>API</b> - Application Programming Interface, a set of software libraries and tools for application/service development, deployment, configuration and maintenance.</li>
+        <li><b>Device</b> - an embedded device - computer - that can host service(s).</li>
+        <li><b>JSON</b> – JavaScript Object Notation.</li>
+        <li><b>JSON-LD</b> – JSON for Linking Data.</li>
+        <li><b>Knowledge</b> - An organized representation of data making it possible to systematically establish connections between separate measurements.</li>
+        <li><b>Knowledge base</b> - A software platform to manage and organize knowledge representation models.</li>
+        <li><b>Knowledge-driven system (KDS)</b> - A system that relies on knowledge bases for storing and managing its data/knowledge.</li>
+        <li><b>Ontology</b> - A format for knowledge representation that can be processed by machines.</li>
+        <li><b>RDF</b> - Resource Description Framework.</li>
+        <li><b>Service</b> - A software application having standardized description to be automatically processed to discover capabilities of a service and decide if and when to integrate it into the bigger application.</li>
+        <li><b>Service-oriented system</b> - A system built out of loosely-coupled components (services) that are arranged into application depending on the current goals of the system.</li>
+        <li><b>Reasoning</b> - A discovery of new, previously unknown facts about the system represented with the knowledge base (e.g. by ontology).</li>
+    </ul>
+</p>
+
+<a name="devices"></a>
+<h2><span class="secno">3. </span>Devices</h2>
+
+<p>In knowledge-driven systems, devices are computer based modules which perform some non-trivial functionality (usually via services), are distributed and interconnected via some network (often via a wireless network). Other terms as embedded systems, cyber-physical systems (CPS), remote terminal units (RTU) are also used instead of the term devices. Devices usually provide interfaces to real world equipment (via sensors and actuators).</p>
+
+<h3><span class="secno">3.1. </span>Problem definition</h3>
+
+<p>
+    There are several problems that can be attributed to devices for building knowledge-oriented service-driven systems. Some of those may look similar for any embedded or cyber-physical systems. However, due to the potential exposure of the devices to the global networks and/or their frequent use for changing applications, those problems may require new approaches.
+</p>
+
+<ul><li>Device hardware selection guidelines.</li></ul>
+<p>
+    Selection of hardware should correspond to the purpose of a device. There are a wide variety of possible hardwares from devices based on low power chips used in wireless sensor networks to the powerful industrial computers (usually PCs) for implementing complex Cyber Physical Systems. Another selection criterion can be based on the instant availability of the device: from custom design to of the shelf solutions (like Arduino, Raspberry Pi, Beagle Bone Black, etc.)
+</p>
+
+<ul><li>Device software selection guidelines.</li></ul>
+<p>
+    Software can also have several variations. It can range from pure hardware (microcontroller) without any operating system to embedded real-time operating system (e.g. Free RTOS, eCos, Zephyr, etc.) or full complex operating system (e.g. Linux, Windows). But only the operating system is not sufficient. Devices should be equipped with software managing the communication, device discovery, reading inputs / writing outputs and dynamically working with services. See, for example, <a href="http://www.escop-project.eu/tools/" target="_blank">eScop RTU</a> based on REX control system or Inico <a href=" http://www.inicotech.com/s1000_overview.html" target="_blank">S1000 devices</a>.    
+</p>
+
+<ul><li>Selection of network communication protocol(s).</li></ul>
+<p>
+    It is highly probable that the majority of devices will implement standard internetworking protocols based on the TCP/IP family of protocols (IP, TCP, UDP, HTTP, HTTPS, FTP, etc.). Also some newer messaging protocols can be used (e.g. MQTT). The new generation of wireless devices will very likely support 6LoWPAN which is suitable for the smallest devices with limited processing capabilities based on low-power radio communication with lower data rates.
+</p>
+
+<ul><li>Device discovery.</li></ul>
+<p>
+    Device discovery is a must for larger systems with dynamically added/removed devices. There are several discovery protocols that usually use some broadcast technique.
+</p>
+
+<ul><li>Device inputs and outputs (incl. safety).</li></ul>
+<p>
+    Software of the device should support drivers for reading of built-in direct inputs (analog, digital, counter, frequency, encoder inputs, etc.) and writing of direct outputs (analog, digital, pulse width modulated outputs, etc.). The quality of this piece of software influences substantially the real-time behaviour of the device.    
+</p>
+
+<ul><li>Device services.</li></ul>
+<p>
+    Device services are based on the same principles as the other services in the system. The only difference is that they are embedded into devices. See details in the following sections.   
+</p>
+
+<ul><li>Semantics of services.</li></ul>
+<p>
+   Semantics of services is a general issue in Knowledge Driven systems, see the discussion below.
+</p>
+
+
+<h3><span class="secno">3.2. </span>APIs</h3>
+<ul>
+    <li>Network communication protocol(s) API(s)
+        <ul>
+            <li>HTTP, HTTPS</li>
+            <li>MQTT</li>
+            <li>CoAP, etc.</li>
+        </ul>
+    </li>
+    <li>Device discovery protocol API(s)</li>
+    <li>API of drivers for reading inputs and writing outputs
+        <ul>
+            <li>Direct inputs/outputs (registers, memory mapping, I2C, SPI, etc.)</li>
+            <li>Communicated inputs/outputs (fieldbus protocols, industrial Ethernet, etc.)</li>
+        </ul>    
+    </li>
+    <li>API for management of device services (Adding, Deleting, Executing)
+        <ul>
+            <li>OPC Unified Architecture</li>
+            <li>REST based APIs</li>
+            <li>Device Profile for Web Services (DPWS)</li>
+        </ul>    
+    </li>
+    <li>API and tools for device configuration
+        <ul>
+            <li>Direct inputs/outputs (registers, memory mapping, I2C, SPI, etc.)</li>
+            <li>Communicated inputs/outputs (fieldbus protocols, industrial Ethernet, etc.)</li>
+        </ul>    
+    </li>
+</ul>
+
+<a name="know"></a>
+<h2><span class="secno">4. </span>Knowledge representation and reasoning</h2>
+
+<p>
+    Conceptually, Knowledge Representation (KR) and Reasoning (KR&R) is an AI discipline that systematize knowledge description independently of any domain and provides a set of decision-making algorithms. Currently, KR&R is being researched by our community due to the possibility of managing semantic descriptions that represent the status and requirements of, for example, personnel, equipment and products.
+</p>
+
+<p>
+    Semantic descriptions are easily understandable by both human and machines so that they have became a valuable resource for the interaction between machines e.g. to control processes in contemporary manufacturing systems.    
+</p>
+
+<p>
+    In addition, semantic reasoning permits the conclusion of implicit facts that are derived from explicit descriptions that are stored in the Knowledge Base (KB). This is a powerful feature of KR&R because machines can extend on runtime the KB, which contains the knowledge about any specific domain. Therefore, the correct use of KR&R brings to machines new capabilities as e.g. automated decision-making or learning.
+</p>
+
+<p>
+    Moreover, the implementation of KBs is nowadays possible within web-based standards. Hence, the accessibility and manipulation of semantic descriptions can be done remotely through the semantic web. This fact presents a nice opportunity that the industrial automation domain is taking for integrating KR&R descriptions with current ICT tools and developments allowing e.g. remote access and control of processes, data mappings, complex event processing, flexible re-configuration or model validation, among other applications.
+</p>
+
+<h3><span class="secno">4.1. </span>Problem definition</h3>
+
+<ul><li>Adequate way to represent knowledge.</li></ul>
+<p>
+   One of the main problems when employing KR&R techniques to formally describe knowledge to be used in a knowledge-driven system is indeed the manner in which the knowledge is represented. The on-going discussion, for example, in the industrial automation domain in this matter concentrates on which of the formalisms must be employed e.g. ontologies, semantic nets, frames, production rules or even databases, among others. Nevertheless, such discussion should be extended to the fact that once the formalism is selected, the implementation of it must be optimal or at least good enough to be more efficient than others. In other words, the selection of a formalism does not make it good by its capabilities but by the quality of its implementation and the expressiveness. Therefore, the implementation of the employed formalism must employ full potentials of it to ensure that the KR&R will be satisfactory and usable for other modules of the knowledge-driven solution.
+</p>
+
+<ul><li>Use of accepted standards for semantic descriptions.</li></ul>
+<p>
+   Knowledge-driven systems can be implemented using CPS to integrate cyber and physical system domains. Such domains have a set of standards that can work together allowing a logical and mappable description. The use of standardised descriptions could be recommended to support the acceptance of knowledge representation. A different definition or naming for the same domain concepts expressed in different models may require to find translation principles between those models. It can be a reason of failure when two different systems exchange same type of information that is hosted and was created by different organisations.
+</p>
+
+<ul><li>Scope of KiSS in terms of semantic descriptions.</li></ul>
+<p>
+  The KiSS W3C Community Group believes that ontology is a mature formalism for fully describing any knowledge of different domains and the services that may be executed for application integration purposes. RDF-based languages provide rich vocabulary and functions to describe information that may be understandable and usable for both humans and machines. In addition, the possibility of adding a layer of knowledge inference within semantic reasoning makes the use of ontologies an attractive approach for the domain so that implicit knowledge not known at design phase can be extremely helpful when making decisions at run time. Moreover, the flexibility and reusability of models are features of ontologies that are critical in very dynamic environments as industrial automation.
+</p>
+
+<ul>
+    <li>Efficiency of ontologies.</li>
+    <li>Time constraints/requirements when querying and updating model.</li>
+    <li>Representative use cases for reasoning.</li>
+</ul>
+<p>
+    One of the main concerns of KiSS for KR&R in knowledge-driven systems is the efficiency of employing ontologies in real industrial scenarios. The completion of the <a href="http://www.escop-project.eu" target="_blank">eScop project</a> has demonstrated that ontologies can be a trustful approach for describing and consuming knowledge in industrial environments. Nevertheless, additional and extended cases have to be developed to identify representative use cases for using reasoning techniques, as industrial systems generally tend to be predictive implemented with a set of hardcoded rules for their control. The engineering methodologies for such systems may not easily allow going away from “hardcoding” perspective. Performance aspects such as a time for interactions with KB are important criteria for assessment and comparison of KB with traditional database approach. Degradation in performance may undermine the benefits of expressive power of ontologies.  Yet another problem is a management of ontology life time. As the changes in the models may be requested from various sources (e.g. devices), the maintenance of the entire picture, as it seen from various sources, may be challenging task. It may range starting from the situations, when one source may simply overwrite the input from another source to the situations, where this contradictions between different inputs can be detected, understood and reacted upon, which requires another level of conceptualization and reasoning. 
+</p>
+
+<h3><span class="secno">4.2. </span>APIs and tools</h3>
+<p>Frameworks
+<ul>
+    <li>Jena</li>
+    <li>Sesame</li>
+    <li>OWL API</li>
+    <li>SKOS</li>
+</ul>
+</p>
+
+<p>Ontology languages
+<ul>
+    <li>RDF, OWL, OWL 2, OWL-S</li>
+    <li>SPARQL, SPARUL
+        <ul><li>SPARQL over HTTP</li></ul>
+    </li>
+    <li>SWRL</li>
+</ul>
+</p>
+
+<p>Ontology editors
+<ul>
+    <li>Olingvo</li>
+    <li>Protege</li>
+    <li>FAST Semantic Workbench</li>
+</ul>
+</p>
+
+<p>RDF stores / Triple stores
+<ul>
+    <li>Fuseki</li>
+    <li>Stardog</li>
+</ul>
+</p>
+
+<p>Reasoners
+<ul>
+    <li>Pellet</li>
+    <li>Sesame</li>
+    <li>HermiT</li>
+    <li>RacerPro</li>
+</ul>
+</p>
+
+<a name="services"></a>
+<h2><span class="secno">5. </span>Service protocols</h2>
+
+<p>
+    There exist several approaches to service implementation. Term services is generally widely used. The term “services” here and further will be user in tight relation to the named expected features. This is related to a need for a proper encapsulation of the functionality on the right level of abstraction.
+</p>
+
+<p>
+    Among the currently existing approaches for the service implementation approaches two main ones should be mentioned: WS-* specifications and RESTful architectural style. These approaches are not strictly contradictory, but are following different philosophies. WS-* proposes the most complete set of specification to implement the WS, while RESTful approach suggests the architectural style to implement capable but lightweight web services exploiting the nature of the web. As the result, the specification and architectural style cannot be effectively compared.
+</p>
+
+<p>
+    Considering the application of distributed systems in manufacturing several options exist with different level of distribution and acceptance by community:
+    <ul>
+        <li>OPC-UA (with SOAP binding implements some part of WS-* spec)</li>
+        <li>DPWS (implements WS-* spec)</li>
+        <li>CoAP (follows the RESTful architecture, used in general IoT)</li>
+        <li>RESTful RTUs</li>
+        <li>NSGi</li>
+    </ul>
+</p>
+
+<h3><span class="secno">5.1. </span>Problem definition</h3>
+<p>
+    <ul><li>Which “philosophy” to follow?</li></ul>
+    The first problem which can be encountered during the implementation of web service based solution is a decision how to implement the services. Considering a need to be integrated in the wider community and leaving the theoretical possibility of development of a new approach to service implementation, the implementer is left with few possibilities: to follow WS-* specification, RESTful architectural style, or some combination of both.
+</p>
+
+<p>
+    <ul><li>Which protocol to use?</li></ul>
+    Assuming that the implementer made a decision of which approach to web services to follow arises a following choice related to the implementation of the approach. Within the WS-” specification there exist multiple possibilities for service binding. Each possibility provides its own benefits and disadvantages, rooted in the nature of underlying communication protocol.
+In case one follows the RESTful approach, different protocols can be used. Normally RESTful services are implemented using HTTP, but unfortunately, it provides certain overhead and is not applicable for example for devices with restrained capabilities. To implement RESTful services in such environment the CoAP protocol can be used. It is easily mapped to HTTP, but enables better performance. Combination of both HTTP and CoAP is possible when the gateways are being used in between corresponding network segments. As the result, the selection of the protocol has to be performed based on the application requirements.
+</p>
+
+<p>
+    <ul><li>How to select a service protocol for implementation in application?</li></ul>
+    In our opinion it should be possible to identify the set of mnemonic rules or a decision table which will support the designer in this decision. The most important factors influencing the decision are: service host capabilities (computational power, networking capabilities), network parameters (reliability, bandwidth), the nature of overall application (amount of service nodes, size and frequency of messages, reliability requirements), nature of related equipment if relevant (e.g. how often controlled device should receive the input from the overall application).
+</p>
+
+<p>
+    <ul><li>How to implement services in applications to create KDS?</li></ul>
+    After the basic questions of the technology and tools selection for basic service capabilities are resolved, the next question is how to implement services. In the opinion of the authors, it is generally required to follow the basic rules identified by the very concept of web services and by the specification and architectural style selected, as otherwise the basic goal of the application of the selected concepts is endangered and the result solution may perform not in line with specification and expectations. Additionally such deviations will complicate the integration with other solutions.
+</p>
+    Additional requirements for the service design are being applied by the aim of having a knowledge-driven system. The services in KDS should be combined with the related knowledge about the service itself. The knowledge about the service should include: the details required for the service invocation such as the communication protocol, expected communication pattern, parameterizable and semantically annotated request and response, possible exceptions and exception resolution mechanisms. Some of the named knowledge may be implicit or agreed upon by default, but this reduces possibility for interaction with the systems following different convention of service description. Additionally on the higher level, the meaning of service related operation should be defined. This will allow the selection of the service for the needs of external systems or the composed services. 
+<p>
+    This leads to a tradeoff between reducing complexity and improving flexibility in design of KDS services. The balance between them is to be defined by common sense depending on the expectation set for the solution.
+</p>
+<p>
+    It is important to understand the nature of the operation underlying the service. For some cases the underlying operation can be abstracted as some combination of CRUD (Create/Read/Update/Delete) actions. Such operation can be natively mapped to e.g. HTTP. In some other cases the operation has different meaning than basic CRUD operation. In this case the operation may be reformulated to be mapped to CRUD or needs specific approach. There is a need for generalized approach for a named problem.
+</p>
+<p>
+    The one of the practical approaches that encompasses the description of the CRUD HTTP RESTful services on application level is HYDRA API.
+</p>
+<p>
+    The service description (extended contract) can be provided by the service itself or registered in some service inventory separately from the service. Furthermore, the automated registration of the services in the service inventory is possible. Considering the fact that complex systems may have hundreds of services dynamically appearing and disappearing in the system, the automation of service registration should provide significant advantages over manual process.
+</p>
+
+<p>
+    <ul><li>How to represent data?</li></ul>
+    As was discussed before the data included in the service oriented communication in the KDS system requires description same as the services themselves. Practically the data should be mapped to the concepts in the knowledge system. One of the approaches would be to include all related information in the message, but such approach will significantly increase the overhead of the communication and create possibilities of desynchronization of data and model. More feasible and secure approach would be to use references for the concepts outside the message itself. The concept of linked data provides a possibility to give the context for a message. Two major implementations for linked data based on JSON and XML are JSON-LD and RDF accordingly. It is possible, but not required to use the self-descriptive data with more complex definitions based on RDFS or OWL on this level.
+</p>
+
+<p>
+    <ul><li>How to represent data relations?</li></ul>
+    Following the concept of the linked data the relations may be hyper links. Furthermore availability of open, public, crowd-sourced resource for the data schemas and relations should accelerate and simplify the convergence of the solutions in different domains.
+</p>
+
+<h3><span class="secno">5.2. </span>APIs and tools</h3>
+<p>Frameworks for service implementations
+<ul>
+    <li>Spring (WS-* & REST for Java)</li>
+    <li>Express (REST for Node.js)</li>
+    <li>Flask (REST for Python)</li>
+    <li>WS4D (DPWS implementation for C, C++, Java ...)</li>
+</ul>
+</p>
+
+<p>Clients
+<ul>
+    <li>Web browser - general</li>
+    <li>Postman, REST advance client - REST</li>
+    <li>Service Explorer - DPWS</li>
+</ul>
+</p>
+
+<p>To implement on device level
+<ul>
+    <li>Some PLCs implementing OPC-UA</li>
+    <li>REX, Inico S1000, eScop RTUs</li>
+</ul>
+</p>
+
+<p>Data representation
+<ul>
+    <li>Concept of hypermedia</li>
+    <li>Linked data RDF, JSON-LD</li>
+    <li>Web Ontology Language (OWL)</li>
+    <li>Hydra: Hypermedia-Driven Web APIs</li>
+</ul>
+</p>
+
+<a name="composition"></a>
+<h2><span class="secno">6. </span>Service composition and integration</h2>
+<p>
+    As presented in the previous section, services are generally bind several parties in order to  assure a proper communication. These parties may exist on different platforms, including cloud-based platforms. Thus, services are recommended to be independent in terms of the consumer technology. Generally services follow a request and response approach. The request comprises a need for certain service. On the other hand, the response of the requested service contains the answer. In this matter, two main players are elaborating for such communication; servers which receive the request and clients which generates the request. In this manner, many organizations (i.e. W3C and OASIS) provided several protocols for implementing services.
+</p>
+
+<p>
+    The term service composition and integration can be seen as the method for constructing and using the communication data according to the selected protocol. It has to be noted that the user selects a web service protocol and then uses the features of the protocol such as discovery of web services or the sequence of flow.   
+</p>
+
+<h3><span class="secno">6.1. </span>Problem definition</h3>
+<p>
+    After choosing the proper protocol, the user is subjected to define the method(s) of exploiting these protocols and deploy them in the KBS. The problem definition can be spotted in the following questions:
+</p>
+<p>
+    <ul><li>What is the nature of the exchanged data?</li></ul>
+    The nature of the data which is required to be exchanged governs the implementation of the web services protocol. As an example, if a resource provides a continuous stream of data for some consumer, then the selection of the protocol and the integration of the protocol has to be compatible with such kind of data. Besides that, the notation format of the data (i.e. JSON, XML, plain text or CSV) matters in terms of parsing.
+</p>
+<p>
+    <ul><li>What is the level of required security?</li></ul>
+    Another factor that the user has to consider is the security level. In this manner, the sequence flow of the web services might be changed according to the security level which the user chooses for the same protocol. As an example, http and https are similar in terms of functionality. However, https includes more request actions.
+</p>
+<p>
+    <ul><li>How to discover web services of a certain resource?</li></ul>
+    As KBS provides reasoning capabilities, the discovery of the web services improves the interactions and allows an autonomous integration. The role of reasoning can be in finding the right services for the given problem application has to solve.
+</p>
+<p>
+    <ul><li>Which approach optimizes the communications efficiency (time, running cost, security)?</li></ul>
+    Many approaches could lead for the same functionality in the same web service protocol. However, the user needs to put the performance into account where the system requires a real time integrations. As an example, in KBS, the information query could have more than one structure, but with an optimized solution, the KBS may have better performance such as the time for querying the data or for parsing the response.
+</p>
+
+
+<h3><span class="secno">6.2. </span>APIs and tools</h3>
+<p>
+    All modern API and tools supports the majority of the available communication protocols. Therefore, it comes to the user for building the service composition methods, the following are some APIs and tools that help the user for more consistent results:
+</p>
+
+<p>Frameworks for service implementations
+<ul>
+    <li>Spring (WS-* & REST for Java)</li>
+    <li>Express (REST for Node.js)</li>
+    <li>Flask (REST for Python)</li>
+    <li>WS4D (DPWS implementation for C, C++, Java ...)</li>
+</ul>
+</p>
+
+<p>Clients
+<ul>
+    <li>Web browser - general</li>
+    <li>Postman, REST advance client - REST</li>
+    <li>Service Explorer - DPWS</li>
+</ul>
+</p>
+
+<p>Data representation
+<ul>
+    <li>Concept of hypermedia</li>
+    <li>Linked data RDF, JSON-LD</li>
+    <li>Web Ontology Language (OWL)</li>
+    <li>Hydra: Hypermedia-Driven Web APIs</li>
+</ul>
+</p>
+
+<p>Data Representation and parsing tools for
+<ul>
+    <li>JSON</li>
+    <li>XML</li>
+    <li>CSV</li>
+    <li>Plain text</li>
+</ul>
+</p>
+
